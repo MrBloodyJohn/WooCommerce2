@@ -75,7 +75,7 @@ $(document).ready(function() {
 
     $('body').on('input', 'input[name="blik_code"]', function(){
         $('form[form-target] input[type="submit"]').hide();
-
+        
         var target = $(this).attr('form-target');
 
         var data = {
@@ -84,7 +84,7 @@ $(document).ready(function() {
             blik: $(this).val()
         };
 
-        if(data.channel && data.blik) {
+        if(this.validity.valid && data.channel && data.blik) {
             $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
                 $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                 submitHideShow(target);
@@ -119,8 +119,24 @@ $(document).ready(function() {
     });
 
     $('body').on('click', 'form[form-target] input[type="submit"]', function(){
-        runBlockUI();
-        return true;
+        $('form[form-target="' + $(this).attr('form-target') + '"]').submit();
+    });
+    
+    $('body').on('submit', 'form[form-target]', function(){
+        var ok = true;
+        
+        $('input[type="text"]', this).each(function(key, val){
+            if(!val.validity.valid) {
+                ok = false;
+                return false;
+            }
+        });
+        
+        if(ok) {
+            runBlockUI();
+        }
+        
+        return ok;
     });
 
     function submitHideShow(target) {

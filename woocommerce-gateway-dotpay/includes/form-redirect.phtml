@@ -58,7 +58,7 @@
                     <?php endif; ?>
                         
                     <?php if('blik' === $keyR) : ?>
-                        <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code">
+                        <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code" autofocus required pattern="[0-9]{6}" title="<?php echo $data['blikTxtValid']; ?>">
                     <?php endif; ?>
                     
                     <?php if('dotpay' !== $keyR || ('dotpay' === $keyR && $data['widget'])) : ?>

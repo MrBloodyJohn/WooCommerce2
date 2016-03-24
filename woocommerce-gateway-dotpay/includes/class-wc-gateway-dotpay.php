@@ -132,6 +132,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         WC_Gateway_Dotpay_Include('/includes/form-redirect.phtml', array(
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
+            'blikTxtValid' => __('Only 6 digits', 'dotpay-payment-gateway'),
             'widget' => $this->isDotWidget(),
             'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
             'p' => $tagP,
