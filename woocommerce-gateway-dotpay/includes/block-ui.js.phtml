@@ -1,11 +1,12 @@
 $(document).ready(function() {
+    var isOneClick = Boolean('<?php echo $data['oneclick'] ?>');
     var isMasterPass = Boolean('<?php echo $data['mp'] ?>');
     var isBlik = Boolean('<?php echo $data['blik'] ?>');
     var isWidget = Boolean('<?php echo $data['widget'] ?>');
 
     $('form[form-target]').hide();
     
-    if(!isMasterPass && !isBlik && !isWidget) {
+    if(!isOneClick && !isMasterPass && !isBlik && !isWidget) {
         $('label[form-target]').hide();
         $('form[form-target="dotpay"]').show();
         $('form[form-target="dotpay"] input[type="submit"]').show();
@@ -21,7 +22,17 @@ $(document).ready(function() {
 
             var data = {};
 
-            if('mp' === target) {
+            if('oneclick' === target) {
+                data.type = target;
+                data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
+
+                if(data.channel) {
+                    $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
+                        $('form[form-target="' + target + '"] input[name="chk"]').val(result);
+                        submitHideShow(target);
+                    });
+                }
+            } else if('mp' === target) {
                 data.type = target;
                 data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
 
@@ -150,7 +161,10 @@ $(document).ready(function() {
             checkPersonalData = $('form[form-target="' + target + '"] input[name="personal_data"]').is(':checked')
         }
 
-        if('mp' === target && checkBylaw && checkPersonalData) {
+        if('oneclick' === target && checkBylaw && checkPersonalData) {
+            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            result = true;
+        } else if('mp' === target && checkBylaw && checkPersonalData) {
             $('form[form-target="' + target + '"] input[type="submit"]').show();
             result = true;
         } else if('blik' === target && checkBylaw && checkPersonalData) {

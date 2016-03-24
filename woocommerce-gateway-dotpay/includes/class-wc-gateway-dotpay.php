@@ -49,6 +49,12 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          * hidden fields MasterPass, BLIK, Dotpay
          */
         $hiddenFields = array(
+            'oneclick' => array(
+                'active' => $this->isDotOneClick(),
+                'fields' => $this->getHiddenFieldsOneClick($order_id),
+                'agreements' => $agreements,
+                'icon' => $this->getIconOneClick(),
+            ),
             'mp' => array(
                 'active' => $this->isDotMasterPass(),
                 'fields' => $this->getHiddenFieldsMasterPass($order_id),
@@ -82,7 +88,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * 
          */
-        if($this->isDotMasterPass() || $this->isDotBlik() || $this->isDotWidget()) {
+        if($this->isDotOneClick() || $this->isDotMasterPass() || $this->isDotBlik() || $this->isDotWidget()) {
             /**
              * 
              */
@@ -115,6 +121,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         ob_start();
         WC_Gateway_Dotpay_Include('/includes/block-ui.js.phtml', array(
+            'oneclick' => $this->isDotOneClick(),
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'widget' => $this->isDotWidget(),
@@ -130,6 +137,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         ob_start();
         WC_Gateway_Dotpay_Include('/includes/form-redirect.phtml', array(
+            'oneclick' => $this->isDotOneClick(),
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'blikTxtValid' => __('Only 6 digits', 'dotpay-payment-gateway'),
@@ -156,6 +164,9 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         
         if($hiddenFields) {
             switch ($type) {
+                case 'oneclick':
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
+                    break;
                 case 'mp':
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
                     break;

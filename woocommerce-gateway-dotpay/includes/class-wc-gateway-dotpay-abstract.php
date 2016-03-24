@@ -75,6 +75,10 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         add_action('woocommerce_api_' . strtolower(get_class($this)) . '_2', array($this, 'build_dotpay_signature'));
     }
     
+    protected function getIconOneClick() {
+        return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/MasterPass.png';
+    }
+    
     protected function getIconMasterPass() {
         return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/MasterPass.png';
     }
@@ -125,6 +129,18 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $result = false;
         if ('yes' === $this->get_option('dotpay_security')) {
             $result = true;
+        }
+        
+        return $result;
+    }
+    
+    protected function isDotOneClick() {
+        $result = false;
+        if ('yes' === $this->get_option('dotpay_oneclick_show')) {
+            $result = true;
+        }
+        if(false === $this->dotpayAgreements) {
+            $result = false;
         }
         
         return $result;
@@ -372,6 +388,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     protected function buildSignature4Request(array $allHiddenFields, $type, $channel = null, $blik = null) {
         
         switch ($type) {
+            case 'oneclick':
+                $hiddenFields = $allHiddenFields[$type]['fields'];
+                break;
             case 'mp':
                 $hiddenFields = $allHiddenFields[$type]['fields'];
                 break;
@@ -416,7 +435,13 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'blik_code' => self::STR_EMPTY
         );
         
-        if('mp' === $type && $this->isDotMasterPass()) {
+        if('oneclick' === $type && $this->isDotOneClick()) {
+            if(isset($channel)) {
+                $fieldsRequestArray['channel'] = $channel;
+            }
+            $fieldsRequestArray['bylaw'] = '1';
+            $fieldsRequestArray['personal_data'] = '1';
+        } elseif('mp' === $type && $this->isDotMasterPass()) {
             if(isset($channel)) {
                 $fieldsRequestArray['channel'] = $channel;
             }
@@ -524,6 +549,16 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             $hiddenFields['ch_lock'] = 1;
             $hiddenFields['type'] = 4;
         }
+        
+        return $hiddenFields;
+    }
+    
+    protected function getHiddenFieldsOneClick($order_id) {
+        $hiddenFields = $this->getHiddenFields($order_id);
+        
+        $hiddenFields['channel'] = 248;
+        $hiddenFields['ch_lock'] = 1;
+        $hiddenFields['type'] = 4;
         
         return $hiddenFields;
     }
