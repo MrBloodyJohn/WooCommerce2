@@ -154,6 +154,20 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         return $html;
     }
     
+    /**
+     * 
+     */
+    public function oneclick_card_register() {
+        die(__METHOD__);
+    }
+    
+    /**
+     * 
+     */
+    public function oneclick_card_list() {
+        die(__METHOD__);
+    }
+    
     public function build_dotpay_signature() {
         $chk = '';
         

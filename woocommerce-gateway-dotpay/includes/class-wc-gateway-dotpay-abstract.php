@@ -73,6 +73,8 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         add_action('woocommerce_receipt_' . $this->id, array($this, 'receipt_page'));
         add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_dotpay_response'));
         add_action('woocommerce_api_' . strtolower(get_class($this)) . '_2', array($this, 'build_dotpay_signature'));
+        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_3', array($this, 'oneclick_card_register'));
+        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_4', array($this, 'oneclick_card_list'));
     }
     
     protected function getIconOneClick() {
