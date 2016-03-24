@@ -4,6 +4,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$nameArrayOneClick = array(
+    __('Show separately in a shop channel', 'dotpay-payment-gateway'),
+    'One-Click',
+);
 $nameArrayMasterPass = array(
     __('Show separately in a shop channel', 'dotpay-payment-gateway'),
     'MasterPass (First Data Polska S.A.)',
@@ -32,6 +36,12 @@ return array(
         'title' => __('Dotpay customer PIN', 'dotpay-payment-gateway'),
         'type' => 'text',
         'default' => '',
+    ),
+    'dotpay_oneclick_show' => array(
+        'title' => __('One-Click', 'dotpay-payment-gateway'),
+        'type' => 'checkbox',
+        'label' => implode(' ', $nameArrayOneClick),
+        'default' => 'yes',
     ),
     'dotpay_masterpass_show' => array(
         'title' => __('MasterPass', 'dotpay-payment-gateway'),
