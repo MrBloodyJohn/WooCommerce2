@@ -173,7 +173,7 @@ $(document).ready(function() {
         } else if('dotpay' === target && checkBylaw && checkPersonalData) {
             $('form[form-target="' + target + '"] input[type="submit"]').show();
             result = true;
-        } else if('dotpay' === target && (isMasterPass || isBlik) && !isWidget) {
+        } else if('dotpay' === target && (isOneClick || isMasterPass || isBlik) && !isWidget) {
             $('form[form-target="' + target + '"] input[type="submit"]').show();
             result = true;
         }
