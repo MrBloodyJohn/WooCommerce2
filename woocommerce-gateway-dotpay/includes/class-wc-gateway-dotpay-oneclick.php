@@ -28,6 +28,7 @@ class WC_Gateway_Dotpay_Oneclick {
         $sqlCreateTable = <<<END
             CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}{$this->table}` (
                 `oneclick_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                `oneclick_order` bigint(20) NOT NULL,
                 `oneclick_user` bigint(20) NOT NULL,
                 `oneclick_card_title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
                 `oneclick_card_hash` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -36,10 +37,12 @@ class WC_Gateway_Dotpay_Oneclick {
                 UNIQUE KEY `oneclick_card_hash` (`oneclick_card_hash`),
                 UNIQUE KEY `oneclick_card_id` (`oneclick_card_id`),
                 KEY `oneclick_user` (`oneclick_user`),
-                KEY `oneclick_card_title` (`oneclick_card_title`)
+                KEY `oneclick_card_title` (`oneclick_card_title`),
+                KEY `oneclick_order` (`oneclick_order`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 END;
+            
         try {
             $wpdb->query($sqlCreateTable);
         } catch (Exception $exc) {
