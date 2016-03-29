@@ -6,9 +6,6 @@
         form[form-target] input[type="submit"] {
             display:none;
         }
-        img.oneclick {
-            height: 60px;
-        }
         img.mp {
             height: 60px;
         }
@@ -34,6 +31,7 @@
                 <label form-target="<?php echo $keyR; ?>">
                     <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
                     <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>">
+                    <span><?php echo $valR['text']; ?></span>
                 </label>
                 <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
                     <?php if('dotpay' === $keyR && $data['widget']) : ?>

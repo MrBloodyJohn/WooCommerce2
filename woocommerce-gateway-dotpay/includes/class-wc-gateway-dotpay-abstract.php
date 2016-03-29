@@ -78,7 +78,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     }
     
     protected function getIconOneClick() {
-        return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/MasterPass.png';
+        return WOOCOMMERCE_DOTPAY_PLUGIN_URL . 'resources/images/dotpay.png';
     }
     
     protected function getIconMasterPass() {
@@ -144,8 +144,15 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         if(false === $this->dotpayAgreements) {
             $result = false;
         }
+        if(0 === $this->getUserId()) {
+            $result = false;
+        }
         
         return $result;
+    }
+    
+    protected function getUserId() {
+        return (int) get_current_user_id();
     }
     
     protected function isDotMasterPass() {

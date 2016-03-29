@@ -103,7 +103,14 @@ END;
     public function del_card() {
         
     }
-
+    
+    /**
+     * 
+     */
+    public function list_card_register() {
+        
+    }
+    
 	/**
 	 * Remove all line items (products, coupons, shipping, taxes) from the order.
 	 *

@@ -54,24 +54,28 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
                 'fields' => $this->getHiddenFieldsOneClick($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconOneClick(),
+                'text' => 'One-Click',
             ),
             'mp' => array(
                 'active' => $this->isDotMasterPass(),
                 'fields' => $this->getHiddenFieldsMasterPass($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconMasterPass(),
+                'text' => 'MasterPass (First Data Polska S.A.)',
             ),
             'blik' => array(
                 'active' => $this->isDotBlik(),
                 'fields' => $this->getHiddenFieldsBlik($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconBLIK(),
+                'text' => 'BLIK (Polski Standard Płatności Sp. z o.o.)',
             ),
             'dotpay' => array(
                 'active' => $this->isDotWidget(),
                 'fields' => $this->getHiddenFieldsDotpay($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconDotpay(),
+                'text' => '',
             ),
         );
         
