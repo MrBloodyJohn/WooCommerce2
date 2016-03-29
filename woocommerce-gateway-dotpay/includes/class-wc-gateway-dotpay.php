@@ -77,7 +77,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             'agreements' => $agreements,
             'icon' => $this->getIconOneClick(),
             'text' => 'One-Click',
-            'text2' => __('Card register'),
+            'text2' => __('Card register', 'dotpay-payment-gateway'),
         );
 
         /**
