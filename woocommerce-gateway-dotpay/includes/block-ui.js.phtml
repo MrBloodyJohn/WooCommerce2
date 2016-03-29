@@ -3,6 +3,8 @@ $(document).ready(function() {
     var isMasterPass = Boolean('<?php echo $data['mp'] ?>');
     var isBlik = Boolean('<?php echo $data['blik'] ?>');
     var isWidget = Boolean('<?php echo $data['widget'] ?>');
+    
+    var oneClickRegisterDisableFirstSubmit = true;
 
     $('form[form-target]').hide();
     
@@ -37,15 +39,7 @@ $(document).ready(function() {
                     });
                 }
             } else if('oneclick_register' === target) {
-                data.type = target;
-                data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
-
-                if(data.channel) {
-                    $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
-                        $('form[form-target="' + target + '"] input[name="chk"]').val(result);
-                        submitHideShow(target);
-                    });
-                }
+                submitHideShow(target);
             } else if('mp' === target) {
                 data.type = target;
                 data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
@@ -145,10 +139,13 @@ $(document).ready(function() {
 
     $('body').on('click', 'form[form-target] input[type="submit"]', function(){
         $('form[form-target="' + $(this).attr('form-target') + '"]').submit();
+        return false;
     });
     
     $('body').on('submit', 'form[form-target]', function(){
         var ok = true;
+        
+        var target = $(this).attr('form-target');
         
         $('input[type="text"]', this).each(function(key, val){
             if(!val.validity.valid) {
@@ -157,12 +154,25 @@ $(document).ready(function() {
             }
         });
         
+        if('oneclick_register' === target && oneClickRegisterDisableFirstSubmit) {
+            ok = false;
+            runBlockUI();
+            oneClickRegister(target);
+        }
+        
         if(ok) {
             runBlockUI();
         }
         
         return ok;
     });
+    
+    function oneClickRegister(target) {
+        var data = {};
+        $.post('<?php echo $data['oneclick_register_url']; ?>', data, function(result) {
+            console.log(result);
+        });
+    }
 
     function submitHideShow(target) {
         var result = false;
@@ -181,7 +191,7 @@ $(document).ready(function() {
         if(oneClickCardSubstr === targetSubstr && checkBylaw && checkPersonalData) {
             $('form[form-target="' + target + '"] input[type="submit"]').show();
             result = true;
-        } else if('oneclick_register' === target && checkBylaw && checkPersonalData) {
+        } else if('oneclick_register' === target) {
             $('form[form-target="' + target + '"] input[type="submit"]').show();
             result = true;
         } else if('mp' === target && checkBylaw && checkPersonalData) {

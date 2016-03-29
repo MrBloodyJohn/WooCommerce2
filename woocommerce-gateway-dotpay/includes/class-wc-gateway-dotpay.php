@@ -127,6 +127,11 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         $signature_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_2', home_url('/')));
         
         /**
+         * url build oneclick register
+         */
+        $oneclick_register_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_3', home_url('/')));
+        
+        /**
          * 
          */
         if($this->isDotOneClick() || $this->isDotMasterPass() || $this->isDotBlik() || $this->isDotWidget()) {
@@ -168,6 +173,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             'widget' => $this->isDotWidget(),
             'message' => $message,
             'signature_url' => $signature_url,
+            'oneclick_register_url' => $oneclick_register_url,
         ));
         $js = ob_get_contents();
         wc_enqueue_js($js);
@@ -199,13 +205,15 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
      * 
      */
     public function oneclick_card_register() {
-        die(__METHOD__);
+        $oneclickCardHash = 'dfgtherherherhterh';
+        
+        die($oneclickCardHash);
     }
     
     /**
      * 
      */
-    public function oneclick_card_list() {
+    public function oneclick_card_unregister() {
         die(__METHOD__);
     }
     

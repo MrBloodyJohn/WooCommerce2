@@ -74,7 +74,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         add_action('woocommerce_api_' . strtolower(get_class($this)), array($this, 'check_dotpay_response'));
         add_action('woocommerce_api_' . strtolower(get_class($this)) . '_2', array($this, 'build_dotpay_signature'));
         add_action('woocommerce_api_' . strtolower(get_class($this)) . '_3', array($this, 'oneclick_card_register'));
-        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_4', array($this, 'oneclick_card_list'));
+        add_action('woocommerce_api_' . strtolower(get_class($this)) . '_4', array($this, 'oneclick_card_unregister'));
     }
     
     protected function getIconOneClick() {
@@ -401,7 +401,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
                 $dbOneClick = new WC_Gateway_Dotpay_Oneclick();
                 $cardId = $dbOneClick->card_getIdByCardHash($this->getUserId(), $creditCardCustomerId);
                 $key = "{$type}_{$cardId}";
-                $hiddenFields = $allHiddenFields["{$key}"]['fields'];
+                $hiddenFields = $allHiddenFields[$key]['fields'];
                 break;
             case 'oneclick_register':
                 $hiddenFields = $allHiddenFields[$type]['fields'];
@@ -453,12 +453,16 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'blik_code' => self::STR_EMPTY
         );
         
-        if('oneclick' === $type && $this->isDotOneClick()) {
+        if('oneclick_card' === $type && $this->isDotOneClick()) {
             if(isset($channel)) {
                 $fieldsRequestArray['channel'] = $channel;
             }
             $fieldsRequestArray['bylaw'] = '1';
             $fieldsRequestArray['personal_data'] = '1';
+        } elseif('oneclick_register' === $type && $this->isDotOneClick()) {
+            if(isset($channel)) {
+                $fieldsRequestArray['channel'] = $channel;
+            }
         } elseif('mp' === $type && $this->isDotMasterPass()) {
             if(isset($channel)) {
                 $fieldsRequestArray['channel'] = $channel;
