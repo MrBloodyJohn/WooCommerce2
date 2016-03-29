@@ -87,7 +87,48 @@ END;
      * 
      */
     public function card_add() {
+        global $wpdb;
         
+        $sqlInsert = <<<END
+            INSERT INTO {$wpdb->prefix}{$this->table}
+            (
+                oneclick_order,
+                oneclick_user,
+                oneclick_card_title,
+                oneclick_card_hash
+            ) VALUES (
+                1,
+                2,
+                3
+            )
+            WHERE
+                oneclick_user = '{$user}'
+                AND
+                oneclick_card_hash = '{$cardHash}'
+            LIMIT 1
+            ;
+
+END;
+                
+        $sql = <<<END
+            SELECT *
+            FROM {$wpdb->prefix}{$this->table}
+            WHERE
+                oneclick_user = '{$user}'
+                AND
+                oneclick_card_hash = '{$cardHash}'
+            LIMIT 1
+            ;
+
+END;
+            
+            $results = null;
+            if($this->getStatus()) {
+                $row = $wpdb->get_row($sql, ARRAY_A);
+                $results = isset($row['oneclick_id']) ? $row['oneclick_id'] : null;
+            }
+            
+            return $results;
     }
     
     /**

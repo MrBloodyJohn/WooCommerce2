@@ -213,7 +213,13 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
      * 
      */
     public function oneclick_card_register() {
-        $oneclickCardHash = 'dfgtherherherhterh';
+        $oneclickCardHash = 0;
+        
+        $hiddenFields = isset($_SESSION['hiddenFields']['oneclick_register']['fields']) ? $_SESSION['hiddenFields']['oneclick_register']['fields'] : null;
+        
+        if($hiddenFields) {
+            
+        }
         
         die($oneclickCardHash);
     }

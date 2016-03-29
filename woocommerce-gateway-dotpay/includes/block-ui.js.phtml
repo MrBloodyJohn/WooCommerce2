@@ -168,8 +168,7 @@ $(document).ready(function() {
     });
     
     function oneClickRegister(target) {
-        var data = {};
-        $.post('<?php echo $data['oneclick_register_url']; ?>', data, function(result) {
+        $.post('<?php echo $data['oneclick_register_url']; ?>', function(result) {
             console.log(result);
         });
     }
