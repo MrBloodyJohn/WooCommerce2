@@ -46,37 +46,74 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         );
         
         /**
-         * hidden fields MasterPass, BLIK, Dotpay
+         * hidden fields One-Click, MasterPass, BLIK, Dotpay
          */
-        $hiddenFields = array(
-            'oneclick' => array(
+        $hiddenFields = array();
+        
+        /**
+         * One-Click Cards
+         */
+        $dbOneClick = new WC_Gateway_Dotpay_Oneclick();
+        $cardList = $dbOneClick->card_list($this->getUserId());
+        foreach($cardList as $cardV) {
+            $oneclick = array(
                 'active' => $this->isDotOneClick(),
                 'fields' => $this->getHiddenFieldsOneClick($order_id),
                 'agreements' => $agreements,
                 'icon' => $this->getIconOneClick(),
                 'text' => 'One-Click',
-            ),
-            'mp' => array(
-                'active' => $this->isDotMasterPass(),
-                'fields' => $this->getHiddenFieldsMasterPass($order_id),
-                'agreements' => $agreements,
-                'icon' => $this->getIconMasterPass(),
-                'text' => 'MasterPass (First Data Polska S.A.)',
-            ),
-            'blik' => array(
-                'active' => $this->isDotBlik(),
-                'fields' => $this->getHiddenFieldsBlik($order_id),
-                'agreements' => $agreements,
-                'icon' => $this->getIconBLIK(),
-                'text' => 'BLIK (Polski Standard Płatności Sp. z o.o.)',
-            ),
-            'dotpay' => array(
-                'active' => $this->isDotWidget(),
-                'fields' => $this->getHiddenFieldsDotpay($order_id),
-                'agreements' => $agreements,
-                'icon' => $this->getIconDotpay(),
-                'text' => '',
-            ),
+                'text2' => "{$cardV['oneclick_card_title']}",
+            );
+            
+            $hiddenFields["oneclick_{$cardV['oneclick_id']}"] = $oneclick;
+        }
+        
+        /**
+         * One-Click Register
+         */
+        $hiddenFields["oneclick_register"] = array(
+            'active' => $this->isDotOneClick(),
+            'fields' => $this->getHiddenFieldsOneClick($order_id),
+            'agreements' => $agreements,
+            'icon' => $this->getIconOneClick(),
+            'text' => 'One-Click',
+            'text2' => __('Card register'),
+        );
+
+        /**
+         * MasterPass
+         */
+        $hiddenFields['mp'] = array(
+            'active' => $this->isDotMasterPass(),
+            'fields' => $this->getHiddenFieldsMasterPass($order_id),
+            'agreements' => $agreements,
+            'icon' => $this->getIconMasterPass(),
+            'text' => 'MasterPass (First Data Polska S.A.)',
+            'text2' => '',
+        );
+        
+        /**
+         * BLIK
+         */
+        $hiddenFields['blik'] = array(
+            'active' => $this->isDotBlik(),
+            'fields' => $this->getHiddenFieldsBlik($order_id),
+            'agreements' => $agreements,
+            'icon' => $this->getIconBLIK(),
+            'text' => 'BLIK (Polski Standard Płatności Sp. z o.o.)',
+            'text2' => '',
+        );
+        
+        /**
+         * Dotpay
+         */
+        $hiddenFields['dotpay'] = array(
+            'active' => $this->isDotWidget(),
+            'fields' => $this->getHiddenFieldsDotpay($order_id),
+            'agreements' => $agreements,
+            'icon' => $this->getIconDotpay(),
+            'text' => '',
+            'text2' => '',
         );
         
         /**

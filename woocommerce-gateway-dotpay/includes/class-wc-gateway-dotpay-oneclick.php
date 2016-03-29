@@ -86,29 +86,47 @@ END;
     /**
      * 
      */
-    public function add_card() {
+    public function card_add() {
         
     }
     
     /**
      * 
      */
-    public function register_card() {
+    public function card_register() {
         
     }
     
     /**
      * 
      */
-    public function del_card() {
+    public function card_del() {
         
     }
     
     /**
      * 
      */
-    public function list_card_register() {
+    public function card_list($user) {
+        global $wpdb;
         
+        $sql = <<<END
+            SELECT *
+            FROM {$wpdb->prefix}{$this->table}
+            WHERE
+                oneclick_user = '{$user}'
+                AND
+                oneclick_card_id IS NOT NULL
+            ;
+
+END;
+            $results = array();
+            if($this->getStatus()) {
+                $results = $wpdb->get_results($sql, ARRAY_A);
+            }
+            
+            return $results;
+                
     }
     
 	/**

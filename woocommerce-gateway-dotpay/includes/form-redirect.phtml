@@ -32,6 +32,7 @@
                     <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
                     <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>">
                     <span><?php echo $valR['text']; ?></span>
+                    <strong><?php echo $valR['text2']; ?></strong>
                 </label>
                 <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
                     <?php if('dotpay' === $keyR && $data['widget']) : ?>
