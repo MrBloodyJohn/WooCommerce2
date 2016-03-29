@@ -447,6 +447,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             'p_info' => $hiddenFields['p_info'],
             'bylaw' => self::STR_EMPTY,
             'personal_data' => self::STR_EMPTY,
+            'credit_card_store' => isset($hiddenFields['credit_card_store']) ? $hiddenFields['credit_card_store'] : self::STR_EMPTY,
+            'credit_card_customer_id' => isset($hiddenFields['credit_card_customer_id']) ? $hiddenFields['credit_card_customer_id'] : self::STR_EMPTY,
+            'credit_card_id' => isset($hiddenFields['credit_card_id']) ? $hiddenFields['credit_card_id'] : self::STR_EMPTY,
             'blik_code' => self::STR_EMPTY
         );
         
