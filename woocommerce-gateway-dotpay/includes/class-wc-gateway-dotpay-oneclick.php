@@ -35,10 +35,10 @@ class WC_Gateway_Dotpay_Oneclick {
                 `oneclick_card_id` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
                 PRIMARY KEY (`oneclick_id`),
                 UNIQUE KEY `oneclick_card_hash` (`oneclick_card_hash`),
+                UNIQUE KEY `oneclick_order` (`oneclick_order`),
                 UNIQUE KEY `oneclick_card_id` (`oneclick_card_id`),
                 KEY `oneclick_user` (`oneclick_user`),
-                KEY `oneclick_card_title` (`oneclick_card_title`),
-                KEY `oneclick_order` (`oneclick_order`)
+                KEY `oneclick_card_title` (`oneclick_card_title`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci AUTO_INCREMENT=1;
 
 END;
