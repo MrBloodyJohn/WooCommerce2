@@ -129,6 +129,33 @@ END;
                 
     }
     
+    /**
+     * 
+     */
+    public function card_getIdByCardHash($user, $cardHash) {
+        global $wpdb;
+        
+        $sql = <<<END
+            SELECT *
+            FROM {$wpdb->prefix}{$this->table}
+            WHERE
+                oneclick_user = '{$user}'
+                AND
+                oneclick_card_hash = '{$cardHash}'
+            LIMIT 1
+            ;
+
+END;
+            
+            $results = null;
+            if($this->getStatus()) {
+                $row = $wpdb->get_row($sql, ARRAY_A);
+                $results = isset($row['oneclick_id']) ? $row['oneclick_id'] : null;
+            }
+            
+            return $results;
+    }
+    
 	/**
 	 * Remove all line items (products, coupons, shipping, taxes) from the order.
 	 *

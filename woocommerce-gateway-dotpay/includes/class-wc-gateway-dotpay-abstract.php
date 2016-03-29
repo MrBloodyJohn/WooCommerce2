@@ -394,10 +394,16 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         return $resultStr;
     }
     
-    protected function buildSignature4Request(array $allHiddenFields, $type, $channel = null, $blik = null) {
+    protected function buildSignature4Request(array $allHiddenFields, $type, $channel = null, $blik = null, $creditCardCustomerId = null) {
         
         switch ($type) {
-            case 'oneclick':
+            case 'oneclick_card':
+                $dbOneClick = new WC_Gateway_Dotpay_Oneclick();
+                $cardId = $dbOneClick->card_getIdByCardHash($this->getUserId(), $creditCardCustomerId);
+                $key = "{$type}_{$cardId}";
+                $hiddenFields = $allHiddenFields["{$key}"]['fields'];
+                break;
+            case 'oneclick_register':
                 $hiddenFields = $allHiddenFields[$type]['fields'];
                 break;
             case 'mp':
@@ -562,12 +568,30 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         return $hiddenFields;
     }
     
-    protected function getHiddenFieldsOneClick($order_id) {
+    private function getHiddenFieldsOneClick($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
         
         $hiddenFields['channel'] = 248;
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
+        
+        return $hiddenFields;
+    }
+    
+    protected function getHiddenFieldsOneClickCard($order_id, $credit_card_customer_id, $credit_card_id) {
+        $hiddenFields = $this->getHiddenFieldsOneClick($order_id);
+        
+        $hiddenFields['credit_card_customer_id'] = $credit_card_customer_id;
+        $hiddenFields['credit_card_id'] = $credit_card_id;
+        
+        return $hiddenFields;
+    }
+    
+    protected function getHiddenFieldsOneClickRegister($order_id) {
+        $hiddenFields = $this->getHiddenFieldsOneClick($order_id);
+        
+        $hiddenFields['credit_card_store'] = 1;
+        $hiddenFields['credit_card_customer_id'] = 0;
         
         return $hiddenFields;
     }

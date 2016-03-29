@@ -19,10 +19,24 @@ $(document).ready(function() {
         $(this).each(function(key, val){
             var checked = $(val).is(':checked');
             var target = $(val).attr('form-target');
+            
+            var oneClickCardSubstr = getOneClickCardStr();
+            var targetSubstr = getOneClickCardSubstr(target);
 
             var data = {};
 
-            if('oneclick' === target) {
+            if(oneClickCardSubstr === targetSubstr) {
+                data.type = oneClickCardSubstr;
+                data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
+                data.cardhash = $('form[form-target="' + target + '"] input[name="credit_card_customer_id"]').val();
+
+                if(data.channel && data.cardhash) {
+                    $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
+                        $('form[form-target="' + target + '"] input[name="chk"]').val(result);
+                        submitHideShow(target);
+                    });
+                }
+            } else if('oneclick_register' === target) {
                 data.type = target;
                 data.channel = $('form[form-target="' + target + '"] input[name="channel"]').val();
 
@@ -160,8 +174,14 @@ $(document).ready(function() {
             checkBylaw = $('form[form-target="' + target + '"] input[name="bylaw"]').is(':checked');
             checkPersonalData = $('form[form-target="' + target + '"] input[name="personal_data"]').is(':checked')
         }
+        
+        var oneClickCardSubstr = getOneClickCardStr();
+        var targetSubstr = getOneClickCardSubstr(target);
 
-        if('oneclick' === target && checkBylaw && checkPersonalData) {
+        if(oneClickCardSubstr === targetSubstr && checkBylaw && checkPersonalData) {
+            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            result = true;
+        } else if('oneclick_register' === target && checkBylaw && checkPersonalData) {
             $('form[form-target="' + target + '"] input[type="submit"]').show();
             result = true;
         } else if('mp' === target && checkBylaw && checkPersonalData) {
@@ -179,6 +199,14 @@ $(document).ready(function() {
         }
 
         return result;
+    }
+    
+    function getOneClickCardStr() {
+        return 'oneclick_card';
+    }
+    
+    function getOneClickCardSubstr(target) {
+        return target.substr(0, getOneClickCardStr().length);
     }
 
     function runBlockUI() {

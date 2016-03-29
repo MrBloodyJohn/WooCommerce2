@@ -58,14 +58,14 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         foreach($cardList as $cardV) {
             $oneclick = array(
                 'active' => $this->isDotOneClick(),
-                'fields' => $this->getHiddenFieldsOneClick($order_id),
+                'fields' => $this->getHiddenFieldsOneClickCard($order_id, $cardV['oneclick_card_hash'], $cardV['oneclick_card_id']),
                 'agreements' => $agreements,
                 'icon' => $this->getIconOneClick(),
                 'text' => 'One-Click',
                 'text2' => "{$cardV['oneclick_card_title']}",
             );
             
-            $hiddenFields["oneclick_{$cardV['oneclick_id']}"] = $oneclick;
+            $hiddenFields["oneclick_card_{$cardV['oneclick_id']}"] = $oneclick;
         }
         
         /**
@@ -73,7 +73,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
          */
         $hiddenFields["oneclick_register"] = array(
             'active' => $this->isDotOneClick(),
-            'fields' => $this->getHiddenFieldsOneClick($order_id),
+            'fields' => $this->getHiddenFieldsOneClickRegister($order_id),
             'agreements' => $agreements,
             'icon' => $this->getIconOneClick(),
             'text' => 'One-Click',
@@ -219,7 +219,11 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         
         if($hiddenFields) {
             switch ($type) {
-                case 'oneclick':
+                case 'oneclick_card':
+                    $cardHash = isset($_POST['cardhash']) ? $_POST['cardhash'] : '';
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, null, $cardHash);
+                    break;
+                case 'oneclick_register':
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
                     break;
                 case 'mp':
