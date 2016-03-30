@@ -156,7 +156,7 @@ $(document).ready(function() {
         
         if('oneclick_register' === target && oneClickRegisterDisableFirstSubmit) {
             ok = false;
-            //runBlockUI();
+            runBlockUI();
             oneClickRegister(target);
         }
         
@@ -169,7 +169,23 @@ $(document).ready(function() {
     
     function oneClickRegister(target) {
         $.post('<?php echo $data['oneclick_register_url']; ?>', function(result) {
-            console.log(result);
+            var data;
+            
+            $('form[form-target="' + target + '"] input[name="credit_card_customer_id"]').val(result);
+
+            data = {
+                type: target,
+                channel: $('form[form-target="' + target + '"] input[name="channel"]').val(),
+                cardhash: result
+            };
+
+            if(data.channel && data.cardhash) {
+                $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
+                    $('form[form-target="' + target + '"] input[name="chk"]').val(result);
+                    oneClickRegisterDisableFirstSubmit = false;
+                    $('form[form-target="' + target + '"]').submit();
+                });
+            }
         });
     }
 

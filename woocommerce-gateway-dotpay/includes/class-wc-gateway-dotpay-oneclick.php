@@ -95,7 +95,7 @@ END;
             $count = 100;
             do {
                 $cardHash = $this->generateCardHash();
-                $test = wpdb::insert(
+                $test = $wpdb->insert(
                     "{$wpdb->prefix}{$this->table}"
                     , array( 
                         'oneclick_order' => "{$orderId}"
@@ -111,7 +111,7 @@ END;
                     )
                 );
                 
-                if($test) {
+                if(false !== $test) {
                     $result = $cardHash;
                     break;
                 }
@@ -136,7 +136,7 @@ END;
         $c = substr($md5Substr, 11, 6);
         $d = substr($md5Substr, 17, 4);
         
-        die("{$a}-{$b}-{$c}-{$d}");
+        return "{$a}-{$b}-{$c}-{$d}";
     }
     
     /**
@@ -200,6 +200,33 @@ END;
             if($this->getStatus()) {
                 $row = $wpdb->get_row($sql, ARRAY_A);
                 $results = isset($row['oneclick_id']) ? $row['oneclick_id'] : null;
+            }
+            
+            return $results;
+    }
+    
+    /**
+     * 
+     */
+    public function card_getHashByOrderId($user, $orderId) {
+        global $wpdb;
+        
+        $sql = <<<END
+            SELECT *
+            FROM {$wpdb->prefix}{$this->table}
+            WHERE
+                oneclick_user = '{$user}'
+                AND
+                oneclick_order = '{$orderId}'
+            LIMIT 1
+            ;
+
+END;
+            
+            $results = null;
+            if($this->getStatus()) {
+                $row = $wpdb->get_row($sql, ARRAY_A);
+                $results = isset($row['oneclick_card_hash']) ? $row['oneclick_card_hash'] : null;
             }
             
             return $results;

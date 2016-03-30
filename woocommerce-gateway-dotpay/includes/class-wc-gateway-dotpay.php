@@ -219,7 +219,11 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         
         if($hiddenFields) {
             $dbOneClick = new WC_Gateway_Dotpay_Oneclick();
-            $result = $dbOneClick->card_add($hiddenFields['control'], $this->getUserId(), 'Test');
+            $result = $dbOneClick->card_getHashByOrderId($this->getUserId(), $hiddenFields['control']);
+            if(null === $result) {
+                $result = $dbOneClick->card_add($hiddenFields['control'], $this->getUserId(), 'Test');
+            }
+            
             if($result) {
                 $oneclickCardHash = $result;
             }
