@@ -196,6 +196,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'blikTxtValid' => __('Only 6 digits', 'dotpay-payment-gateway'),
+            'blikTxtPlaceholder' => __('Blik code 6 digits', 'dotpay-payment-gateway'),
             'widget' => $this->isDotWidget(),
             'h3' => __('Transaction Details', 'dotpay-payment-gateway'),
             'p' => $tagP,
@@ -250,11 +251,12 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         if($hiddenFields) {
             switch ($type) {
                 case 'oneclick_card':
-                    $cardHash = isset($_POST['cardhash']) ? $_POST['cardhash'] : '';
+                    $cardHash = isset($_POST['cardhash']) ? $_POST['cardhash'] : self::STR_EMPTY;
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, null, $cardHash);
                     break;
                 case 'oneclick_register':
-                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);
+                    $cardHash = isset($_POST['cardhash']) ? $_POST['cardhash'] : self::STR_EMPTY;
+                    $chk = $this->buildSignature4Request($hiddenFields, $type, $channel, null, $cardHash);
                     break;
                 case 'mp':
                     $chk = $this->buildSignature4Request($hiddenFields, $type, $channel);

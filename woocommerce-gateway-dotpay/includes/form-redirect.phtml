@@ -3,9 +3,9 @@
         form[form-target] {
             display:none;
         }
-        form[form-target] input[type="submit"] {
+/*        form[form-target] input[type="submit"] {
             display:none;
-        }
+        }*/
         img.mp {
             height: 60px;
         }
@@ -60,14 +60,14 @@
                     <?php endif; ?>
                         
                     <?php if('blik' === $keyR) : ?>
-                        <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code" autofocus required pattern="[0-9]{6}" title="<?php echo $data['blikTxtValid']; ?>">
+                        <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code" autofocus required pattern="[0-9]{6}" title="<?php echo $data['blikTxtValid']; ?>" placeholder="<?php echo $data['blikTxtPlaceholder']; ?>">
                     <?php endif; ?>
                     
                     <?php if(('dotpay' !== $keyR && 'oneclick_register' !== $keyR) || ('dotpay' === $keyR && $data['widget'])) : ?>
                         <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
                             <p>
                                 <label>
-                                    <input type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
+                                    <input form-target="<?php echo $keyR; ?>" type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
                                     <?php echo $valA; ?>
                                 </label>
                             </p>
@@ -75,7 +75,7 @@
                     <?php endif; ?>
                         
                     <p>
-                        <input form-target="<?php echo $keyR; ?>" class="button" type="submit" value="<?php echo $data['submit']; ?>">
+                        <input form-target="<?php echo $keyR; ?>" class="button" type="submit" value="<?php echo $data['submit']; ?>" disabled>
                     </p>
                 </form>
             </p>

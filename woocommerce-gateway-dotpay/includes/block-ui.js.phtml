@@ -11,12 +11,12 @@ $(document).ready(function() {
     if(!isOneClick && !isMasterPass && !isBlik && !isWidget) {
         $('label[form-target]').hide();
         $('form[form-target="dotpay"]').show();
-        $('form[form-target="dotpay"] input[type="submit"]').show();
+        $('form[form-target="dotpay"] input[type="submit"]').attr('disabled', false);
     }
 
     $('body').on('click', 'input[name="strategy"]', function(){
         $('form[form-target]').hide();
-        $('form[form-target] input[type="submit"]').hide();
+        $('form[form-target="' + $(this).attr('form-target') +'"] input[type="submit"]').attr('disabled', true);
 
         $(this).each(function(key, val){
             var checked = $(val).is(':checked');
@@ -91,11 +91,21 @@ $(document).ready(function() {
             }
         });
     });
+    
+    $('body').on('change', 'input[name="bylaw"]', function() {
+        $('form[form-target="' + $(this).attr('form-target') + '"] input[type="submit"]').attr('disabled', true);
+        submitHideShow($(this).attr('form-target'));
+    });
+    
+    $('body').on('change', 'input[name="personal_data"]', function() {
+        $('form[form-target="' + $(this).attr('form-target') + '"] input[type="submit"]').attr('disabled', true);
+        submitHideShow($(this).attr('form-target'));
+    });
 
     $('body').on('input', 'input[name="blik_code"]', function(){
-        $('form[form-target] input[type="submit"]').hide();
-        
         var target = $(this).attr('form-target');
+        
+        $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', true);
 
         var data = {
             type: target,
@@ -112,7 +122,7 @@ $(document).ready(function() {
     });
 
     $('body').on('click', '.channel-container', function(){
-        $('form[form-target] input[type="submit"]').hide();
+        $('form[form-target] input[type="submit"]').attr('disabled', true);
 
         var target = 'dotpay';
         var data = {};
@@ -156,7 +166,7 @@ $(document).ready(function() {
         
         if('oneclick_register' === target && oneClickRegisterDisableFirstSubmit) {
             ok = false;
-            runBlockUI();
+            //runBlockUI();
             oneClickRegister(target);
         }
         
@@ -183,7 +193,7 @@ $(document).ready(function() {
                 $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
                     $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                     oneClickRegisterDisableFirstSubmit = false;
-                    $('form[form-target="' + target + '"]').submit();
+                    //$('form[form-target="' + target + '"]').submit();
                 });
             }
         });
@@ -194,32 +204,39 @@ $(document).ready(function() {
 
         var checkBylaw = false;
         var checkPersonalData = false;
+        var checkBlikCode = false;
 
         if(target) {
             checkBylaw = $('form[form-target="' + target + '"] input[name="bylaw"]').is(':checked');
             checkPersonalData = $('form[form-target="' + target + '"] input[name="personal_data"]').is(':checked')
+            $('form[form-target="' + target + '"] input[name="blik_code"]').each(function(key, val){
+                if(val.validity.valid) {
+                    checkBlikCode = true;
+                    return false;
+                }
+            });
         }
         
         var oneClickCardSubstr = getOneClickCardStr();
         var targetSubstr = getOneClickCardSubstr(target);
 
         if(oneClickCardSubstr === targetSubstr && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
         } else if('oneclick_register' === target) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
         } else if('mp' === target && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
-        } else if('blik' === target && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+        } else if('blik' === target && checkBlikCode && checkBylaw && checkPersonalData) {
+            $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
         } else if('dotpay' === target && checkBylaw && checkPersonalData) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
         } else if('dotpay' === target && (isOneClick || isMasterPass || isBlik) && !isWidget) {
-            $('form[form-target="' + target + '"] input[type="submit"]').show();
+            $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
         }
 

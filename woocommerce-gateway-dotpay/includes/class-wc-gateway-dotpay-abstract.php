@@ -463,6 +463,9 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
             if(isset($channel)) {
                 $fieldsRequestArray['channel'] = $channel;
             }
+            if(isset($creditCardCustomerId)) {
+                $fieldsRequestArray['credit_card_customer_id'] = $creditCardCustomerId;
+            }
         } elseif('mp' === $type && $this->isDotMasterPass()) {
             if(isset($channel)) {
                 $fieldsRequestArray['channel'] = $channel;
@@ -578,6 +581,10 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     private function getHiddenFieldsOneClick($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
         
+        if($this->isDotTest()) {
+            $hiddenFields['currency'] = 'EUR';
+        }
+        
         $hiddenFields['channel'] = 248;
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
@@ -606,7 +613,12 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     protected function getHiddenFieldsMasterPass($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
         
-        $hiddenFields['channel'] = 71;
+        if($this->isDotTest()) {
+            $hiddenFields['channel'] = 245;
+        } else {
+            $hiddenFields['channel'] = 71;
+        }
+        
         $hiddenFields['ch_lock'] = 1;
         $hiddenFields['type'] = 4;
         
