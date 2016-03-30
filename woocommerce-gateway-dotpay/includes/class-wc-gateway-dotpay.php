@@ -193,6 +193,8 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         ob_start();
         WC_Gateway_Dotpay_Include('/includes/form-redirect.phtml', array(
             'oneclick' => $this->isDotOneClick(),
+            'oneclickTxtValid' => __('6 or more characters', 'dotpay-payment-gateway'),
+            'oneclickTxtPlaceholder' => __('Card title 6 or more characters', 'dotpay-payment-gateway'),
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'blikTxtValid' => __('Only 6 digits', 'dotpay-payment-gateway'),
@@ -216,13 +218,15 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
     public function oneclick_card_register() {
         $oneclickCardHash = 0;
         
+        $cardTitle = isset($_POST['cardtitle']) ? $_POST['cardtitle'] : __('My card');
+        
         $hiddenFields = isset($_SESSION['hiddenFields']['oneclick_register']['fields']) ? $_SESSION['hiddenFields']['oneclick_register']['fields'] : null;
         
         if($hiddenFields) {
             $dbOneClick = new WC_Gateway_Dotpay_Oneclick();
             $result = $dbOneClick->card_getHashByOrderId($this->getUserId(), $hiddenFields['control']);
             if(null === $result) {
-                $result = $dbOneClick->card_add($hiddenFields['control'], $this->getUserId(), 'Test');
+                $result = $dbOneClick->card_add($hiddenFields['control'], $this->getUserId(), $cardTitle);
             }
             
             if($result) {

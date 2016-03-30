@@ -19,6 +19,10 @@
             width:200px;
             margin: 0px 0px 20px 0px;
         }
+        input#card_title {
+            width:300px;
+            margin: 0px 0px 20px 0px;
+        }
     </style>
     
     <h3><?php echo $data['h3'] ?></h3>
@@ -59,6 +63,10 @@
                         <p class="my-form-widget-container"></p>
                     <?php endif; ?>
                         
+                    <?php if('oneclick_register' === $keyR) : ?>
+                        <input form-target="<?php echo $keyR; ?>" id="card_title" type="text" value="" autofocus required pattern=".{6,}" title="<?php echo $data['oneclickTxtValid']; ?>" placeholder="<?php echo $data['oneclickTxtPlaceholder']; ?>">
+                    <?php endif; ?>
+                    
                     <?php if('blik' === $keyR) : ?>
                         <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code" autofocus required pattern="[0-9]{6}" title="<?php echo $data['blikTxtValid']; ?>" placeholder="<?php echo $data['blikTxtPlaceholder']; ?>">
                     <?php endif; ?>

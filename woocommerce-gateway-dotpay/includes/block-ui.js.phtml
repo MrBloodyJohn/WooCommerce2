@@ -101,6 +101,14 @@ $(document).ready(function() {
         $('form[form-target="' + $(this).attr('form-target') + '"] input[type="submit"]').attr('disabled', true);
         submitHideShow($(this).attr('form-target'));
     });
+    
+    $('body').on('input', 'input[id="card_title"]', function(){
+        var target = $(this).attr('form-target');
+        
+        $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', true);
+        
+        submitHideShow(target);
+    });
 
     $('body').on('input', 'input[name="blik_code"]', function(){
         var target = $(this).attr('form-target');
@@ -166,7 +174,7 @@ $(document).ready(function() {
         
         if('oneclick_register' === target && oneClickRegisterDisableFirstSubmit) {
             ok = false;
-            //runBlockUI();
+            runBlockUI();
             oneClickRegister(target);
         }
         
@@ -178,7 +186,11 @@ $(document).ready(function() {
     });
     
     function oneClickRegister(target) {
-        $.post('<?php echo $data['oneclick_register_url']; ?>', function(result) {
+        var dataReg = {
+            cardtitle: $('form[form-target="' + target + '"] input[id="card_title"]').val()
+        }
+    
+        $.post('<?php echo $data['oneclick_register_url']; ?>', dataReg, function(result) {
             var data;
             
             $('form[form-target="' + target + '"] input[name="credit_card_customer_id"]').val(result);
@@ -193,7 +205,7 @@ $(document).ready(function() {
                 $.post('<?php echo $data['signature_url']; ?>', data, function(result) {
                     $('form[form-target="' + target + '"] input[name="chk"]').val(result);
                     oneClickRegisterDisableFirstSubmit = false;
-                    //$('form[form-target="' + target + '"]').submit();
+                    $('form[form-target="' + target + '"]').submit();
                 });
             }
         });
@@ -205,6 +217,7 @@ $(document).ready(function() {
         var checkBylaw = false;
         var checkPersonalData = false;
         var checkBlikCode = false;
+        var checkCardTitle = false;
 
         if(target) {
             checkBylaw = $('form[form-target="' + target + '"] input[name="bylaw"]').is(':checked');
@@ -212,6 +225,12 @@ $(document).ready(function() {
             $('form[form-target="' + target + '"] input[name="blik_code"]').each(function(key, val){
                 if(val.validity.valid) {
                     checkBlikCode = true;
+                    return false;
+                }
+            });
+            $('form[form-target="' + target + '"] input[id="card_title"]').each(function(key, val){
+                if(val.validity.valid) {
+                    checkCardTitle = true;
                     return false;
                 }
             });
@@ -223,7 +242,7 @@ $(document).ready(function() {
         if(oneClickCardSubstr === targetSubstr && checkBylaw && checkPersonalData) {
             $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
-        } else if('oneclick_register' === target) {
+        } else if('oneclick_register' === target && checkCardTitle) {
             $('form[form-target="' + target + '"] input[type="submit"]').attr('disabled', false);
             result = true;
         } else if('mp' === target && checkBylaw && checkPersonalData) {
