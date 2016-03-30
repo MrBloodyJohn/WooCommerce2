@@ -218,7 +218,11 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         $hiddenFields = isset($_SESSION['hiddenFields']['oneclick_register']['fields']) ? $_SESSION['hiddenFields']['oneclick_register']['fields'] : null;
         
         if($hiddenFields) {
-            
+            $dbOneClick = new WC_Gateway_Dotpay_Oneclick();
+            $result = $dbOneClick->card_add($hiddenFields['control'], $this->getUserId(), 'Test');
+            if($result) {
+                $oneclickCardHash = $result;
+            }
         }
         
         die($oneclickCardHash);

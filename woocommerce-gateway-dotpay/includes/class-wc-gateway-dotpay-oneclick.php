@@ -86,49 +86,57 @@ END;
     /**
      * 
      */
-    public function card_add() {
+    public function card_add($orderId, $userId, $cardTitle) {
         global $wpdb;
         
-        $sqlInsert = <<<END
-            INSERT INTO {$wpdb->prefix}{$this->table}
-            (
-                oneclick_order,
-                oneclick_user,
-                oneclick_card_title,
-                oneclick_card_hash
-            ) VALUES (
-                1,
-                2,
-                3
-            )
-            WHERE
-                oneclick_user = '{$user}'
-                AND
-                oneclick_card_hash = '{$cardHash}'
-            LIMIT 1
-            ;
-
-END;
+        $result = 0;
+        
+        if($this->getStatus()) {
+            $count = 100;
+            do {
+                $cardHash = $this->generateCardHash();
+                $test = wpdb::insert(
+                    "{$wpdb->prefix}{$this->table}"
+                    , array( 
+                        'oneclick_order' => "{$orderId}"
+                        ,'oneclick_user' => "{$userId}"
+                        ,'oneclick_card_title' => "{$cardTitle}" 
+                        ,'oneclick_card_hash' => "{$cardHash}" 
+                    )
+                    , array(
+                        '%d'
+                        ,'%d'
+                        ,'%s'
+                        ,'%s'
+                    )
+                );
                 
-        $sql = <<<END
-            SELECT *
-            FROM {$wpdb->prefix}{$this->table}
-            WHERE
-                oneclick_user = '{$user}'
-                AND
-                oneclick_card_hash = '{$cardHash}'
-            LIMIT 1
-            ;
-
-END;
+                if($test) {
+                    $result = $cardHash;
+                    break;
+                }
+                
+                $count--;
+            } while($count);
+        }
             
-            $results = null;
-            if($this->getStatus()) {
-                $row = $wpdb->get_row($sql, ARRAY_A);
-                $results = isset($row['oneclick_id']) ? $row['oneclick_id'] : null;
-            }
-            
-            return $results;
+        return $result;
+    }
+    
+    private function generateCardHash() {
+        $microtime = '' . microtime(true);
+        $md5 = md5($microtime);
+        
+        $mtRand = mt_rand(0, 11);
+        
+        $md5Substr = substr($md5, $mtRand, 21);
+        
+        $a = substr($md5Substr, 0, 6);
+        $b = substr($md5Substr, 6, 5);
+        $c = substr($md5Substr, 11, 6);
+        $d = substr($md5Substr, 17, 4);
+        
+        die("{$a}-{$b}-{$c}-{$d}");
     }
     
     /**
