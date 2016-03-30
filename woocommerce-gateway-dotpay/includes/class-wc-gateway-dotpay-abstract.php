@@ -257,6 +257,11 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     }
 
     protected function checkCurrency($order) {
+        if($this->isDotTest() && 248 === (int) $this->fieldsResponse['channel']) {
+            $currencyOrder = 'EUR';
+        } else {
+            $currencyOrder = $order->get_order_currency();
+        }
         $currencyOrder = $order->get_order_currency();
         $currencyResponse = $this->fieldsResponse['operation_original_currency'];
 
