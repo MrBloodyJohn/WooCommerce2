@@ -262,7 +262,6 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         } else {
             $currencyOrder = $order->get_order_currency();
         }
-        $currencyOrder = $order->get_order_currency();
         $currencyResponse = $this->fieldsResponse['operation_original_currency'];
 
         if ($currencyOrder !== $currencyResponse) {
@@ -532,7 +531,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
          * url redirect and back
          */
         $return_url = $this->get_return_url($order);
-        $notify_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay', home_url('/')));
+        $notify_url = str_replace('http:', 'https:', add_query_arg('wc-api', 'WC_Gateway_Dotpay', home_url('/')));
         
         /**
          * user data
@@ -576,6 +575,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $hiddenFields = $this->getHiddenFields($order_id);
         
         if($this->isDotWidget()) {
+            $hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
             $hiddenFields['ch_lock'] = 1;
             $hiddenFields['type'] = 4;
         }
@@ -619,6 +619,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $hiddenFields = $this->getHiddenFields($order_id);
         
         if($this->isDotTest()) {
+            $hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
             $hiddenFields['channel'] = 245;
         } else {
             $hiddenFields['channel'] = 71;
@@ -632,6 +633,10 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
     
     protected function getHiddenFieldsBlik($order_id) {
         $hiddenFields = $this->getHiddenFields($order_id);
+        
+        if($this->isDotTest()) {
+            $hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
+        }
         
         $hiddenFields['channel'] = 73;
         $hiddenFields['ch_lock'] = 1;
