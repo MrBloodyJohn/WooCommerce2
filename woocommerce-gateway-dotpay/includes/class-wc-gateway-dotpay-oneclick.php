@@ -9,7 +9,7 @@
  */
 class WC_Gateway_Dotpay_Oneclick {
     
-    protected $table = 'dotpay_oneclick';
+    protected $table = 'woocommerce_dotpay_oneclick';
     
     protected $status = false;
     
