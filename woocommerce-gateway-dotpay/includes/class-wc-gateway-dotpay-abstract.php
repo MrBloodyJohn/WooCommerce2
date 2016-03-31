@@ -575,7 +575,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $hiddenFields = $this->getHiddenFields($order_id);
         
         if($this->isDotWidget()) {
-            $hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
+            //$hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
             $hiddenFields['ch_lock'] = 1;
             $hiddenFields['type'] = 4;
         }
@@ -619,7 +619,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $hiddenFields = $this->getHiddenFields($order_id);
         
         if($this->isDotTest()) {
-            $hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
+            //$hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
             $hiddenFields['channel'] = 245;
         } else {
             $hiddenFields['channel'] = 71;
@@ -635,7 +635,7 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
         $hiddenFields = $this->getHiddenFields($order_id);
         
         if($this->isDotTest()) {
-            $hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
+            //$hiddenFields['URLC'] = str_replace('https:', 'http:', $hiddenFields['URLC']);
         }
         
         $hiddenFields['channel'] = 73;
