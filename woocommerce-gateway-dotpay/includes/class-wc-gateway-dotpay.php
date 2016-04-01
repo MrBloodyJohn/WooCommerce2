@@ -195,6 +195,7 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             'oneclick' => $this->isDotOneClick(),
             'oneclickTxtValid' => __('6 or more characters', 'dotpay-payment-gateway'),
             'oneclickTxtPlaceholder' => __('Card title 6 or more characters', 'dotpay-payment-gateway'),
+            'oneclickTxtSaveCard' => __('Remember your data card (Your card details are safely stored in Dotpay. There will be no need for them to enter the next payment in the store.)', 'dotpay-payment-gateway'),
             'mp' => $this->isDotMasterPass(),
             'blik' => $this->isDotBlik(),
             'blikTxtValid' => __('Only 6 digits', 'dotpay-payment-gateway'),
@@ -321,6 +322,8 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
             default:
                 $order->update_status('processing', $note);
         }
+        
+        die(var_dump($_POST));
 
         /**
          * OK

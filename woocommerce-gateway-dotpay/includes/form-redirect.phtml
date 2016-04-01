@@ -80,6 +80,12 @@
 
                 <?php if('oneclick_register' === $keyR) : ?>
                     <input form-target="<?php echo $keyR; ?>" id="card_title" type="text" value="" autofocus required pattern=".{6,}" title="<?php echo $data['oneclickTxtValid']; ?>" placeholder="<?php echo $data['oneclickTxtPlaceholder']; ?>">
+                    <p>
+                        <label>
+                            <input type="checkbox" value="1" checked required>
+                            <span><?php echo $data['oneclickTxtSaveCard']; ?></span>
+                        </label>
+                    </p>
                 <?php endif; ?>
 
                 <?php if('blik' === $keyR) : ?>
@@ -90,7 +96,7 @@
                     <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
                         <p>
                             <label>
-                                <input form-target="<?php echo $keyR; ?>" type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
+                                <input form-target="<?php echo $keyR; ?>" type="checkbox" name="<?php echo $keyA; ?>" value="1" checked required>
                                 <?php echo $valA; ?>
                             </label>
                         </p>

@@ -249,8 +249,8 @@ abstract class WC_Gateway_Dotpay_Abstract extends WC_Payment_Gateway {
 
     protected function getPostParams() {
         foreach ($this->fieldsResponse as $k => &$v) {
-            $value = isset($_POST[$k]) ? $_POST[$k] : '';
-            if ($value !== '') {
+            $value = isset($_POST[$k]) ? $_POST[$k] : self::STR_EMPTY;
+            if ($value !== self::STR_EMPTY) {
                 $v = $value;
             }
         }
