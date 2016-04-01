@@ -124,12 +124,12 @@ class WC_Gateway_Dotpay extends WC_Gateway_Dotpay_Abstract {
         /**
          * url build signature
          */
-        $signature_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_2', home_url('/')));
+        $signature_url = $this->getUrlSignature();
         
         /**
          * url build oneclick register
          */
-        $oneclick_register_url = str_replace('https:', 'http:', add_query_arg('wc-api', 'WC_Gateway_Dotpay_3', home_url('/')));
+        $oneclick_register_url = $this->getUrlOneClickRegister();
         
         /**
          * 
