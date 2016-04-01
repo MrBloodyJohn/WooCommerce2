@@ -3,14 +3,27 @@
         form[form-target] {
             display:none;
         }
-/*        form[form-target] input[type="submit"] {
-            display:none;
-        }*/
+        p[display-row] {
+            display: table-row;
+            height: 70px;
+        }
+        label[display-cell] {
+            display: table-cell;
+            height: inherit;
+        }
+        label[display-cell] input,
+        label[display-cell] img,
+        label[display-cell] span,
+        label[display-cell] strong
+        {
+            display: inline;
+            vertical-align: middle;
+        }
         img.mp {
-            height: 60px;
+            height: 50px;
         }
         img.blik {
-            height: 35px;
+            height: 30px;
         }
         label {
             cursor: pointer;
@@ -31,62 +44,63 @@
     <?php $countStrategy = 0; ?>
     <?php foreach($data['hiddenFields'] as $keyR => $valR) : ?>
         <?php if($valR['active'] || 'dotpay' === $keyR) : ?>
-            <p>
-                <label form-target="<?php echo $keyR; ?>">
+            <p display-row>
+                <label display-cell form-target="<?php echo $keyR; ?>">
                     <input type="radio" name="strategy" form-target="<?php echo $keyR; ?>">
                     <img class="<?php echo $keyR; ?>" src="<?php echo $valR['icon']; ?>">
                     <span><?php echo $valR['text']; ?></span>
                     <strong><?php echo $valR['text2']; ?></strong>
                 </label>
-                <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
-                    <?php if('dotpay' === $keyR && $data['widget']) : ?>
-                        <link href="<?php echo $data['action']; ?>widget/payment_widget.min.css" rel="stylesheet">
-                        <script type="text/javascript">
-                            var dotpayWidgetConfig = {
-                                sellerAccountId: '<?php echo $valR['fields']['id']; ?>',
-                                amount: '<?php echo $valR['fields']['amount']; ?>',
-                                currency: '<?php echo $valR['fields']['currency']; ?>',
-                                lang: '<?php echo $valR['fields']['lang']; ?>',
-                                widgetFormContainerClass: 'my-form-widget-container',
-                                offlineChannel: 'mark',
-                                offlineChannelTooltip: true
-                            };
-                        </script>
-                        <script type="text/javascript" id="dotpay-payment-script" src="<?php echo $data['action']; ?>widget/payment_widget.js"></script>
-                    <?php endif; ?>
-                    
-                    <?php foreach($valR['fields'] as $keyF => $valF) : ?>
-                        <input type="hidden" value="<?php echo $valF; ?>" name="<?php echo $keyF; ?>">
-                    <?php endforeach; ?>
-                    
-                    <?php if('dotpay' === $keyR && $data['widget']) : ?>
-                        <p class="my-form-widget-container"></p>
-                    <?php endif; ?>
-                        
-                    <?php if('oneclick_register' === $keyR) : ?>
-                        <input form-target="<?php echo $keyR; ?>" id="card_title" type="text" value="" autofocus required pattern=".{6,}" title="<?php echo $data['oneclickTxtValid']; ?>" placeholder="<?php echo $data['oneclickTxtPlaceholder']; ?>">
-                    <?php endif; ?>
-                    
-                    <?php if('blik' === $keyR) : ?>
-                        <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code" autofocus required pattern="[0-9]{6}" title="<?php echo $data['blikTxtValid']; ?>" placeholder="<?php echo $data['blikTxtPlaceholder']; ?>">
-                    <?php endif; ?>
-                    
-                    <?php if(('dotpay' !== $keyR && 'oneclick_register' !== $keyR) || ('dotpay' === $keyR && $data['widget'])) : ?>
-                        <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
-                            <p>
-                                <label>
-                                    <input form-target="<?php echo $keyR; ?>" type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
-                                    <?php echo $valA; ?>
-                                </label>
-                            </p>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                        
-                    <p>
-                        <input form-target="<?php echo $keyR; ?>" class="button" type="submit" value="<?php echo $data['submit']; ?>" disabled>
-                    </p>
-                </form>
             </p>
+            
+            <form form-target="<?php echo $keyR; ?>" method="post" action="<?php echo $data['action']; ?>">
+                <?php if('dotpay' === $keyR && $data['widget']) : ?>
+                    <link href="<?php echo $data['action']; ?>widget/payment_widget.min.css" rel="stylesheet">
+                    <script type="text/javascript">
+                        var dotpayWidgetConfig = {
+                            sellerAccountId: '<?php echo $valR['fields']['id']; ?>',
+                            amount: '<?php echo $valR['fields']['amount']; ?>',
+                            currency: '<?php echo $valR['fields']['currency']; ?>',
+                            lang: '<?php echo $valR['fields']['lang']; ?>',
+                            widgetFormContainerClass: 'my-form-widget-container',
+                            offlineChannel: 'mark',
+                            offlineChannelTooltip: true
+                        };
+                    </script>
+                    <script type="text/javascript" id="dotpay-payment-script" src="<?php echo $data['action']; ?>widget/payment_widget.js"></script>
+                <?php endif; ?>
+
+                <?php foreach($valR['fields'] as $keyF => $valF) : ?>
+                    <input type="hidden" value="<?php echo $valF; ?>" name="<?php echo $keyF; ?>">
+                <?php endforeach; ?>
+
+                <?php if('dotpay' === $keyR && $data['widget']) : ?>
+                    <p class="my-form-widget-container"></p>
+                <?php endif; ?>
+
+                <?php if('oneclick_register' === $keyR) : ?>
+                    <input form-target="<?php echo $keyR; ?>" id="card_title" type="text" value="" autofocus required pattern=".{6,}" title="<?php echo $data['oneclickTxtValid']; ?>" placeholder="<?php echo $data['oneclickTxtPlaceholder']; ?>">
+                <?php endif; ?>
+
+                <?php if('blik' === $keyR) : ?>
+                    <input form-target="<?php echo $keyR; ?>" type="text" value="" name="blik_code" autofocus required pattern="[0-9]{6}" title="<?php echo $data['blikTxtValid']; ?>" placeholder="<?php echo $data['blikTxtPlaceholder']; ?>">
+                <?php endif; ?>
+
+                <?php if(('dotpay' !== $keyR && 'oneclick_register' !== $keyR) || ('dotpay' === $keyR && $data['widget'])) : ?>
+                    <?php foreach($valR['agreements'] as $keyA => $valA) : ?>
+                        <p>
+                            <label>
+                                <input form-target="<?php echo $keyR; ?>" type="checkbox" name="<?php echo $keyA; ?>" value="1" checked>
+                                <?php echo $valA; ?>
+                            </label>
+                        </p>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+
+                <p>
+                    <input form-target="<?php echo $keyR; ?>" class="button" type="submit" value="<?php echo $data['submit']; ?>" disabled>
+                </p>
+            </form>
             
             <?php if($valR !== end($data['hiddenFields'])) : ?>
                 <hr>
